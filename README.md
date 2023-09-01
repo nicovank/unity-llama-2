@@ -65,9 +65,10 @@ python3 /work/pi_emeryb_umass_edu/nvankempen/transformers/src/transformers/model
 import torch
 import transformers
 
-tokenizer = transformers.LlamaTokenizer.from_pretrained("llama-2-70b-chat-hf")
+config = transformers.LlamaConfig(max_position_embeddings=4096)
+tokenizer = transformers.LlamaTokenizer.from_pretrained("./llama-2-70b-chat-hf")
 streamer = transformers.TextStreamer(tokenizer)
-model = transformers.LlamaForCausalLM.from_pretrained("llama-2-70b-chat-hf", device_map="auto")
+model = transformers.LlamaForCausalLM.from_pretrained("./llama-2-70b-chat-hf", config=config, device_map="auto")
 
 pipeline = transformers.pipeline(
     "text-generation",
@@ -95,7 +96,6 @@ sequences = pipeline(
     top_k=10,
     num_return_sequences=1,
     pad_token_id=tokenizer.eos_token_id,
-    max_length=4096,
     streamer=streamer
 )
 ```
@@ -106,10 +106,11 @@ sequences = pipeline(
 import torch
 import transformers
 
+config = transformers.LlamaConfig(max_position_embeddings=16384)
 model_name = "codellama/CodeLlama-34b-Instruct-hf"
 tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
 streamer = transformers.TextStreamer(tokenizer)
-model = transformers.AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+model = transformers.AutoModelForCausalLM.from_pretrained(model_name, config=config, device_map="auto")
 
 pipeline = transformers.pipeline(
     "text-generation",
@@ -137,7 +138,6 @@ sequences = pipeline(
     top_k=10,
     num_return_sequences=1,
     pad_token_id=tokenizer.eos_token_id,
-    max_length=4096,
     streamer=streamer
 )
 ```
