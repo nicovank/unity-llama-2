@@ -67,6 +67,13 @@ tokenizer = transformers.LlamaTokenizer.from_pretrained("llama-2-70b-chat-hf")
 streamer = transformers.TextStreamer(tokenizer)
 model = transformers.LlamaForCausalLM.from_pretrained("llama-2-70b-chat-hf", device_map="auto")
 
+pipeline = transformers.pipeline(
+    "text-generation",
+    tokenizer=tokenizer,
+    model=model,
+    device_map="auto",
+)
+
 with open("/home/nvankempen_umass_edu/cwhy-short", "r") as f:
     prompt = f.read()
 
@@ -79,13 +86,6 @@ If a question does not make any sense, or is not factually coherent, explain why
 """
 
 inputs = tokenizer(prompt, return_tensors="pt").to('cuda')
-
-pipeline = transformers.pipeline(
-    "text-generation",
-    tokenizer=tokenizer,
-    model=model,
-    device_map="auto",
-)
 
 sequences = pipeline(
     prompt,
