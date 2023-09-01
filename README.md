@@ -59,6 +59,8 @@ python3 /work/pi_emeryb_umass_edu/nvankempen/transformers/src/transformers/model
 
 # Example
 
+## Llama 2
+
 ```python
 import torch
 import transformers
@@ -66,6 +68,48 @@ import transformers
 tokenizer = transformers.LlamaTokenizer.from_pretrained("llama-2-70b-chat-hf")
 streamer = transformers.TextStreamer(tokenizer)
 model = transformers.LlamaForCausalLM.from_pretrained("llama-2-70b-chat-hf", device_map="auto")
+
+pipeline = transformers.pipeline(
+    "text-generation",
+    tokenizer=tokenizer,
+    model=model,
+    device_map="auto",
+)
+
+with open("/home/nvankempen_umass_edu/cwhy-short", "r") as f:
+    prompt = f.read()
+
+prompt = f"""<s>[INST] <<SYS>>
+You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.
+If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.
+<</SYS>>w
+
+{prompt} [/INST]
+"""
+
+inputs = tokenizer(prompt, return_tensors="pt").to('cuda')
+
+sequences = pipeline(
+    prompt,
+    do_sample=True,
+    top_k=10,
+    num_return_sequences=1,
+    pad_token_id=tokenizer.eos_token_id,
+    max_length=4096,
+    streamer=streamer
+)
+```
+
+## Code Llama
+
+```python
+import torch
+import transformers
+
+model_name = "codellama/CodeLlama-34b-Instruct-hf"
+tokenizer = transformers.AutoTokenizer.from_pretrained(model_name)
+streamer = transformers.TextStreamer(tokenizer)
+model = transformers.AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
 
 pipeline = transformers.pipeline(
     "text-generation",
