@@ -95,6 +95,7 @@ sequences = pipeline(
     top_k=10,
     num_return_sequences=1,
     pad_token_id=tokenizer.eos_token_id,
+    max_length=4096,
     streamer=streamer
 )
 ```
@@ -136,6 +137,7 @@ sequences = pipeline(
     top_k=10,
     num_return_sequences=1,
     pad_token_id=tokenizer.eos_token_id,
+    max_length=16384,
     streamer=streamer
 )
 ```
