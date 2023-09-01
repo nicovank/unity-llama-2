@@ -30,6 +30,12 @@ pip install git+https://github.com/huggingface/transformers.git@main
 > **Note**
 > You should be able to just use the weights in my directory and skip this section.
 
+> **Warning**
+> If you're downloading weights directly from HuggingFace, add this to your `.zshrc` or equivalent!
+> ```bash
+> export HF_HOME=/work/pi_emeryb_umass_edu/nvankempen/huggingface
+> ```
+
 ## Download
 
 You should request download links [here](https://ai.meta.com/resources/models-and-libraries/llama-downloads/).
