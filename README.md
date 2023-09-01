@@ -22,7 +22,7 @@ conda activate llama # If the environment already exists.
 conda create --name llama python=3.11
 conda activate llama
 pip install -r requirements.txt
-# TODO: transformers.
+pip install git+https://github.com/huggingface/transformers.git@main
 ```
 
 # Getting the weights
